@@ -19,7 +19,7 @@ variable "bucket_acl" {
 variable "bucket_tags" {
 	description	= "Tags map."
 	type		= map(string)
-	default		{}
+	default		= {}
 }
 
 variable "block_public_access" {
