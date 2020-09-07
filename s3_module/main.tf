@@ -2,7 +2,7 @@ resource "aws_s3_bucket" "this" {
   count 	= var.create_bucket ? 1 : 0
   bucket 	= var.bucket_name
   acl   	= var.bucket_acl
-  tags 		= var.bucket_tags
+  tags    = var.bucket_tags
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {
