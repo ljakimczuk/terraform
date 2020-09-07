@@ -7,16 +7,21 @@ on:
 jobs:
   static-analysis:
     runs-on: ubuntu-latest
+    services:
+      localstack:
+        image: localstack/localstack
+        ports:
+          - 4566:4566
+        env:
+          SERVICES: s3
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      # Runs a single command using the runners shell
       - name: Lint Code
         uses: docker://wata727/tflint
         with:
-          volumes: "$GITHUB_WORKSPACE:/data"
           entrypoint: /bin/sh
           args: |
             -c "\
@@ -25,3 +30,15 @@ jobs:
              cd $GITHUB_WORKSPACE/test && \
              terraform init && \
              tflint --loglevel debug --module"
+
+      - name: Init Code 
+        uses: docker://hashicorp/terraform:0.12.29
+        with:
+          entrypoint: terraform
+          args: init
+      
+      - name: Validate Code
+        uses: docker://hashicorp/terraform:0.12.29
+        with:
+          entrypoint: terraform
+          args: validate
