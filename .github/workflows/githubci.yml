@@ -22,6 +22,6 @@ jobs:
             -c "\
              apk update && \
              apk add terraform && \
-             cd $GITHUB_WORKSPACE/terraform/test && \
+             cd $GITHUB_WORKSPACE/test && \
              terraform init && \
              tflint --loglevel debug --module"
