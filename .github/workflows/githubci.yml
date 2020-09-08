@@ -18,22 +18,10 @@ jobs:
           entrypoint: terraform
           args: init ./test/
           
-      - name: Lint Test Code  New
+      - name: Lint Test Code
         uses: docker://wata727/tflint:0.19.1
         with:
           args: --loglevel debug --module ./test/
-
-      - name: Lint Test Code
-        uses: docker://wata727/tflint
-        with:
-          entrypoint: /bin/sh
-          args: |
-            -c "\
-             apk update && \
-             apk add terraform && \
-             cd $GITHUB_WORKSPACE/test && \
-             terraform init && \
-             tflint --loglevel debug --module"
       
       - name: Validate Test Code 
         uses: docker://hashicorp/terraform:0.12.29
