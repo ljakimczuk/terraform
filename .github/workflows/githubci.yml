@@ -48,7 +48,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Apply Code
+      - name: Apply Code OLD
         uses: docker://hashicorp/terraform:0.12.29
         with:
           entrypoint: sh
@@ -58,9 +58,14 @@ jobs:
              terraform init && \
              terraform apply -auto-approve"
 
-      - name: Apply Code 2
+      - name: Init Test Code
         uses: docker://hashicorp/terraform:0.12.29
         with:
-          entrypoint: sh
-          args: |
-            -c "ls ${PWD}"
+          entrypoint: terraform
+          args: init ${PWD}/test/
+
+      - name: Apply Test Code
+        uses: docker://hashicorp/terraform:0.12.29
+        with:
+          entrypoint: terraform
+          args: -auto-approve apply ${PWD}/test/
