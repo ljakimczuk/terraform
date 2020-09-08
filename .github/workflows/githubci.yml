@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v2
 
-      - name: Lint Code
+      - name: Lint Test Code
         uses: docker://wata727/tflint
         with:
           entrypoint: /bin/sh
@@ -24,15 +24,17 @@ jobs:
              terraform init && \
              tflint --loglevel debug --module"
 
-      - name: Validate Code 
+      - name: Init Test Code 
         uses: docker://hashicorp/terraform:0.12.29
         with:
-          entrypoint: sh
-          args: |
-            -c "\
-             cd $GITHUB_WORKSPACE/test && \
-             terraform init && \
-             terraform validate -no-color"
+          entrypoint: terraform
+          args: init ./test/
+      
+      - name: Validate Test Code 
+        uses: docker://hashicorp/terraform:0.12.29
+        with:
+          entrypoint: terraform
+          args: validate ./test/ -no-color
 
   dynamic-analysis:
     runs-on: ubuntu-latest
@@ -53,15 +55,15 @@ jobs:
         with:
           entrypoint: terraform
           args: init ./test/
-      
-      - name: Apply Test Code
-        uses: docker://hashicorp/terraform:0.12.29
-        with:
-          entrypoint: terraform
-          args: destroy -auto-approve ./test/
 
       - name: Apply Test Code
         uses: docker://hashicorp/terraform:0.12.29
         with:
           entrypoint: terraform
           args: apply -auto-approve ./test/
+      
+      - name: Destroy Test Code
+        uses: docker://hashicorp/terraform:0.12.29
+        with:
+          entrypoint: terraform
+          args: destroy -auto-approve ./test/
