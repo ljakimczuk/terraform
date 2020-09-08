@@ -62,4 +62,5 @@ jobs:
         uses: docker://hashicorp/terraform:0.12.29
         with:
           entrypoint: sh
-          args: ls ${PWD}
+          args: |
+            -c "ls ${PWD}"
