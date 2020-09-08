@@ -5,15 +5,8 @@ on:
     branches: [ master ]
 
 jobs:
-  test-ci:
+  static-analysis:
     runs-on: ubuntu-latest
-    services:
-      localstack:
-        image: localstack/localstack
-        ports:
-          - 4566:4566
-        env:
-          SERVICES: s3
 
     steps:
       - name: Checkout Code
@@ -40,7 +33,21 @@ jobs:
              cd $GITHUB_WORKSPACE/test && \
              terraform init && \
              terraform validate -no-color"
-      
+
+  dynamic-analysis:
+    runs-on: ubuntu-latest
+    services:
+      localstack:
+        image: localstack/localstack
+        ports:
+          - 4566:4566
+        env:
+          SERVICES: s3
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
       - name: Apply Code
         uses: docker://hashicorp/terraform:0.12.29
         with:
@@ -50,3 +57,9 @@ jobs:
              cd $GITHUB_WORKSPACE/test && \
              terraform init && \
              terraform apply -auto-approve"
+
+     - name: Apply Code 2
+       uses: docker://hashicorp/terraform:0.12.29
+       with:
+         entrypoint: terraform
+         args: validate
