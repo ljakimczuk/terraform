@@ -62,10 +62,10 @@ jobs:
         uses: docker://hashicorp/terraform:0.12.29
         with:
           entrypoint: terraform
-          args: init ${PWD}/test/
+          args: init ./test/
 
       - name: Apply Test Code
         uses: docker://hashicorp/terraform:0.12.29
         with:
           entrypoint: terraform
-          args: apply -auto-approve ${PWD}/test/
+          args: apply -auto-approve ./test/
