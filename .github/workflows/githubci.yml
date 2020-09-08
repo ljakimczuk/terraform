@@ -61,5 +61,5 @@ jobs:
       - name: Apply Code 2
         uses: docker://hashicorp/terraform:0.12.29
         with:
-          entrypoint: terraform
-          args: validate
+          entrypoint: sh
+          args: ls ${PWD}
