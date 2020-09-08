@@ -68,10 +68,14 @@ jobs:
           entrypoint: terraform
           args: apply -auto-approve ./tests/s3/
       
-      #############################
-      # Verify here the resources #
-      # were created successfully #
-      #############################
+      # Confirm somehow the resources have been created
+      - name: Confirm Apply Succeeded
+        uses: docker://amazon/aws-cli:2.0.7
+        env:
+          AWS_ACCESS_KEY_ID: "fake-access-key"
+          AWS_SECRET_ACCESS_KEY: "fake-secret-key"
+        with:
+          args: --endpoint-url=http://localstack:4566 s3api head-bucket --bucket test
 
       # (Probably optional) Clean up the created resources
       - name: Destroy Test Code
