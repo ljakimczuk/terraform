@@ -11,6 +11,17 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+      
+      - name: Init Test Code 
+        uses: docker://hashicorp/terraform:0.12.29
+        with:
+          entrypoint: terraform
+          args: init ./test/
+          
+      - name: Lint Test Code  New
+        uses: docker://wata727/tflint:0.19.1
+        with:
+          args: --loglevel debug --module ./test/
 
       - name: Lint Test Code
         uses: docker://wata727/tflint
@@ -23,12 +34,6 @@ jobs:
              cd $GITHUB_WORKSPACE/test && \
              terraform init && \
              tflint --loglevel debug --module"
-
-      - name: Init Test Code 
-        uses: docker://hashicorp/terraform:0.12.29
-        with:
-          entrypoint: terraform
-          args: init ./test/
       
       - name: Validate Test Code 
         uses: docker://hashicorp/terraform:0.12.29
