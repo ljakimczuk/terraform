@@ -68,4 +68,4 @@ jobs:
         uses: docker://hashicorp/terraform:0.12.29
         with:
           entrypoint: terraform
-          args: -auto-approve apply ${PWD}/test/
+          args: apply -auto-approve ${PWD}/test/
